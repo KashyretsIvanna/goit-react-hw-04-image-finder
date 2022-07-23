@@ -8,9 +8,10 @@ import Button from 'components/Button';
 class ImageGallery extends Component {
   state = {
     loading: false,
-    items: null,
+    items: [],
     imagesNumber: 12,
     modal: false,
+    lengthOfJson: null,
   };
 
   static propTypes = {
@@ -39,7 +40,10 @@ class ImageGallery extends Component {
       this.setState({ loading: true });
       fetch(URL)
         .then(res => res.json())
-        .then(items => this.setState({ items: items.hits }))
+        .then(items => {
+          this.setState({ items: items.hits, lengthOfJson: items.totalHits });
+          console.log(items);
+        })
         .finally(() => this.setState({ loading: false }));
 
       console.log(this.props.filter);
@@ -49,19 +53,22 @@ class ImageGallery extends Component {
   render() {
     return (
       <Fragment>
-        <ul className={styles.ImageGallery}>
-          {this.state.items
-            ? this.state.items.map(el => (
-                <ImageGalleryItem
-                  onClickedImage={this.handleClickedImage}
-                  key={el.id}
-                  element={el}
-                />
-              ))
-            : null}
-        </ul>
+        {this.state.items && (
+          <ul className={styles.ImageGallery}>
+            {this.state.items.map(el => (
+              <ImageGalleryItem
+                onClickedImage={this.handleClickedImage}
+                key={el.id}
+                element={el}
+              />
+            ))}
+          </ul>
+        )}
         {this.state.loading === true && <Loader />}
-        {this.state.items && <Button onLoadMore={this.handleLoadMore} />}
+        {this.state.items.length < this.state.lengthOfJson && (
+          <Button onLoadMore={this.handleLoadMore} />
+        )}
+        {/* his.state.items && */}
       </Fragment>
     );
   }

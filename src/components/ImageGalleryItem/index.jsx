@@ -8,7 +8,10 @@ class ImageGalleryItem extends Component {
     modal: false,
   };
   static propTypes = {
-    element: PropTypes.object.isRequired,
+    element: PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+    }).isRequired,
     onClickedImage: PropTypes.func.isRequired,
   };
 
