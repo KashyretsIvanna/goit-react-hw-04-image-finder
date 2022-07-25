@@ -1,53 +1,48 @@
-import { Component } from 'react';
 import styles from '../Searchbar/index.module.css';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-class Searchbar extends Component {
-  state = {
-    value: '',
+const Searchbar = props => {
+  const [value, setValue] = useState('');
+
+  const handleChangeValue = e => {
+    setValue(e.target.value);
   };
 
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
-
-  handleChangeValue = e => {
-    this.setState({ value: e.target.value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.value);
+    props.onSubmit(value);
   };
 
-  render() {
-    return (
-      <header className={styles.Searchbar}>
-        <form
-          onSubmit={e => {
-            this.handleSubmit(e);
+  return (
+    <header className={styles.Searchbar}>
+      <form
+        onSubmit={e => {
+          handleSubmit(e);
+        }}
+        className={styles.SearchForm}
+      >
+        <button type="submit" className={styles.SearchForm_button}>
+          <span className={styles.SearchForm_button_label}>Search</span>
+        </button>
+
+        <input
+          value={value}
+          onChange={e => {
+            handleChangeValue(e);
           }}
-          className={styles.SearchForm}
-        >
-          <button type="submit" className={styles.SearchForm_button}>
-            <span className={styles.SearchForm_button_label}>Search</span>
-          </button>
+          className={styles.SearchForm_input}
+          type="text"
+          autoComplete="off"
+          autoFocus={true}
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+};
 
-          <input
-            value={this.state.value}
-            onChange={e => {
-              this.handleChangeValue(e);
-            }}
-            className={styles.SearchForm_input}
-            type="text"
-            autoComplete="off"
-            autoFocus={true}
-            placeholder="Search images and photos"
-          />
-        </form>
-      </header>
-    );
-  }
-}
-
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 export default Searchbar;

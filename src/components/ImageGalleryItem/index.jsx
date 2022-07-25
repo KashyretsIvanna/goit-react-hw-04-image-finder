@@ -1,56 +1,51 @@
 import styles from '../ImageGallery/index.module.css';
-import { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Fragment } from 'react';
 import Modal from 'components/Modal';
+import { useState } from 'react';
 
-class ImageGalleryItem extends Component {
-  state = {
-    modal: false,
-  };
-  static propTypes = {
-    element: PropTypes.shape({
-      largeImageURL: PropTypes.string.isRequired,
-      webformatURL: PropTypes.string.isRequired,
-    }).isRequired,
-    onClickedImage: PropTypes.func.isRequired,
+const ImageGalleryItem = props => {
+  const [modal, setModal] = useState(false);
+
+  const openModal = () => {
+    setModal(true);
   };
 
-  openModal = () => {
-    this.setState({ modal: true });
-  };
-
-  closeModal = e => {
+  const closeModal = e => {
     if (e.key === 'Escape') {
-      this.setState({ modal: false });
+      setModal(false);
     } else if (e.target === e.currentTarget) {
-      this.setState({ modal: false });
+      setModal(false);
     }
   };
 
-  render() {
-    return (
-      <Fragment>
-        {this.state.modal && (
-          <Modal
-            closeModal={this.closeModal}
-            image={this.props.element.largeImageURL}
-          />
-        )}
-        <li
-          onClick={() => {
-            this.openModal(this.props.element);
-          }}
-          className={styles.ImageGalleryItem}
-        >
-          <img
-            className={styles.ImageGalleryItem_image}
-            src={this.props.element.webformatURL}
-            alt=""
-          />
-        </li>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      {modal && (
+        <Modal closeModal={closeModal} image={props.element.largeImageURL} />
+      )}
+      <li
+        onClick={() => {
+          openModal(props.element);
+        }}
+        className={styles.ImageGalleryItem}
+      >
+        <img
+          className={styles.ImageGalleryItem_image}
+          src={props.element.webformatURL}
+          alt=""
+        />
+      </li>
+    </Fragment>
+  );
+};
+
+ImageGalleryItem.propTypes = {
+  element: PropTypes.shape({
+    largeImageURL: PropTypes.string.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+  }).isRequired,
+  onClickedImage: PropTypes.func.isRequired,
+};
 
 export default ImageGalleryItem;

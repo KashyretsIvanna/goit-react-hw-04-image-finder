@@ -1,26 +1,21 @@
 import Searchbar from './Searchbar';
 import styles from '../components/styles.module.css';
-import { Component } from 'react';
 import ImageGallery from './ImageGallery';
+import { useState } from 'react';
 
-class App extends Component {
-  state = {
-    filter: '',
-    json: [],
+const App = () => {
+  const [filter, setFilter] = useState('');
+
+  const handleSubmit = value => {
+    setFilter(value);
   };
 
-  handleSubmit = value => {
-    this.setState({ filter: value });
-  };
-
-  render() {
-    return (
-      <div className={styles.App}>
-        <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery filter={this.state.filter} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.App}>
+      <Searchbar onSubmit={handleSubmit} />
+      <ImageGallery filter={filter} />
+    </div>
+  );
+};
 
 export default App;
