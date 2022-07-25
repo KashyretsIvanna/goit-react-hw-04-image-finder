@@ -11,11 +11,11 @@ const Modal = props => {
 
   useEffect(() => {
     window.addEventListener('keydown', e => eventListen(e));
-  }, []);
+  });
 
   useEffect(() => {
     return window.removeEventListener('keydown', e => eventListen(e));
-  },[]);
+  });
 
   return (
     <div
